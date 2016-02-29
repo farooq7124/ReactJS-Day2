@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Bug Tracker</title>
+	<script src="react.js"></script>
+	<script src="react-dom.js"></script>
+	<script src="browser.min.js"></script>
+	<script type="text/javascript">
+		/*Use Cases*/
+		/*
+		1. List the bugs
+		2. Add a new bug
+		3. Toggle the closed status of the bug
+		4. Remove closed bugs
+		5. Display stats (closed bugs / open bugs)
+		*/
+	</script>
+	<style type="text/css">
+	.statistics{
+		font-size: 18pt;
+	}
+	.closed{
+		color : red;
+		text-decoration: line-through;
+		font-style: italic;
+		font-weight: bold;
+	}
+	li{
+		cursor: pointer;
+	}
+	</style>
+</head>
+<body>
+<script type="text/babel">
+	var StatisticsView = React.createClass({
+		render : function(){
+			return (<div>
+			<h1>Bug Tracker</h1>
+			<div className="statistics">
+			<span className="closed">2</span>
+			<span>/</span>
+			<span>5</span>
+		</div></div>);
+		}
+	});
+	var BugTrackerForm = React.createClass({
+		render : function(){
+			return (<div>
+			
+			<label>Bug :</label>
+			<input type="text" name="" id="" />
+			<input type="button" value="Add New" />
+			<input type="button" value="Remove Closed" /></div>);
+		}
+		
+	});
+	
+	var BugListView = React.createClass({
+		render : function(){
+			return (<div>
+				<ol>
+					<li className="closed">Server communication failure</li>
+					<li>Data validation is wrong</li>
+				</ol>
+			</div>);
+		}
+		
+	});
+	
+	var Content = React.createClass({
+		render : function(){
+			return (<div>
+			<StatisticsView></StatisticsView>
+			<BugTrackerForm></BugTrackerForm>
+			<BugListView></BugListView>
+			</div>);
+		}
+	});
+	
+	ReactDOM.render(<Content ></Content>, document.body);
+</script>
+
+	
+</body>
+</html>
