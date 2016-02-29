@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8" />
+ <title>ReactJS </title>
+ <script src="react.js"></script>
+ <script src="react-dom.js"></script>
+ <script src="browser.min.js"></script>
+ <style>
+	input {
+		margin : 10px;
+	}
+ </style>
+</head>
+<body>
+ 
+ <script type="text/babel">
+	
+	var Spinner = React.createClass({
+		getInitialState : function(){
+			return {
+				value : 0
+			};
+		},
+		increment : function(){
+			this.setState({value : ++this.state.value});
+		},
+		decrement : function(){
+			this.setState({value : --this.state.value});
+		},
+		render : function(){
+			console.log("Component Rendered");
+			return (<div>
+				<input type="button" value="Down" onClick={this.decrement} />
+				<span>{this.state.value}</span>
+				<input type="button" value="Up" onClick={this.increment}/>
+			</div>);
+		}
+	});
+	
+	var Timmer = React.createClass({
+		componentDidMount : function(){
+			setInterval(function(){
+				this.setState({value : new Date().toString()});
+			}.bind(this),1000);
+		},
+		getInitialState : function(){
+			return {
+				value : new Date().toString()
+			};
+		},
+		render : function(){
+			return (<div>Current Time is {this.state.value}</div>)
+		}
+	
+	});
+	
+	ReactDOM.render(<Timmer />, document.body);
+ </script>
+<!-- ReactDOM.render(<Content title="Welcome to React" message="Hey You"/>, document.body); -->
+</body>
+</html>

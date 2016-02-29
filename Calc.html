@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8" />
+ <title>ReactJS </title>
+ <script src="react.js"></script>
+ <script src="react-dom.js"></script>
+ <script src="browser.min.js"></script>
+ <style>
+	input {
+		margin : 10px;
+	}
+ </style>
+</head>
+<body>
+ 
+ <script type="text/babel">
+	
+	var Calculator = React.createClass({
+		getInitialState : function(){
+			return {
+				percentChange : 0
+			}
+		},
+		rangeChange : function(){
+			var tax = this.refs.rangeTax.value;
+			this.setState({
+				percentChange : this.refs.rangeTax.value
+			});
+		},
+		calculate : function(){
+			var basic = this.refs.txtBasic.value ;
+			var da = this.refs.txtDa.value ;
+			var hra = this.refs.txtHra.value ;
+			
+			var salary = parseInt(basic) + parseInt(hra) + parseInt(da) ;
+			var tax = this.refs.rangeTax.value;
+			console.log(this.refs.rangeTax.value);
+			this.setState({
+				percentChange : this.refs.rangeTax.value
+			});
+			var taxDeduc = ( tax / 100 ) * salary;
+			this.setState({
+				salary : (salary - taxDeduc)
+			})
+		},
+		render : function(){
+			return (<div>
+				<table>
+				<tbody>
+				<tr>
+					<td><label>Basic : </label></td>
+					<td><input type="text" ref="txtBasic"/></td>
+				</tr>
+				<tr>
+					<td><label>Da : </label></td>
+					<td><input type="text" ref="txtDa"/></td>
+				</tr>
+				<tr>	
+					<td><label>Hra : </label></td>
+					<td><input type="text" ref="txtHra"/></td>
+				</tr>
+				<tr>
+					<td><label>Tax : </label></td>
+					
+					<td>
+						<input type="range" ref="rangeTax" onChange={this.rangeChange} />
+						<span ref="spanTax">[Tax {this.state.percentChange} %]</span>
+					</td>
+				</tr>
+				<tr>
+					<td><input type="button" value="Calculate" onClick={this.calculate}/></td>
+					<td><div>Salar : {this.state.salary}</div></td>
+				</tr>
+				</tbody>
+				</table>
+			</div>);
+		}
+	});
+	
+	 
+	
+	ReactDOM.render(<Calculator />, document.body);
+ </script>
+<!-- ReactDOM.render(<Content title="Welcome to React" message="Hey You"/>, document.body); -->
+</body>
+</html>

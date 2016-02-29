@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8" />
+ <title>ReactJS </title>
+ <script src="react.js"></script>
+ <script src="react-dom.js"></script>
+ <script src="browser.min.js"></script>
+ 
+</head>
+<body>
+ 
+ <script type="text/babel">
+	var AppHeading = React.createClass({
+		render : function(){
+			return (<h1>{this.props.title}</h1>)
+		}
+	});
+	
+	var AppMessage = React.createClass({
+		render : function(){
+			return (<h3>{this.props.message}</h3>)
+		}
+	});
+	
+	var Content = React.createClass({
+		render : function(){
+			return (<div>
+			<AppHeading title={this.props.input.title}></AppHeading>
+			<AppMessage message={this.props.input.message}></AppMessage>
+			</div>);
+		}
+	});
+	 var data = {
+		title : "Welcome to react",
+		message : "A Facinating way!"
+	 };
+	
+	ReactDOM.render(<Content input={data}/>, document.body);
+ </script>
+<!-- ReactDOM.render(<Content title="Welcome to React" message="Hey You"/>, document.body); -->
+</body>
+</html>
