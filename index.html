@@ -1,43 +1,154 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
- <meta charset="UTF-8" />
- <title>ReactJS </title>
- <script src="react.js"></script>
- <script src="react-dom.js"></script>
- <script src="browser.min.js"></script>
- 
+	<meta charset="UTF-8">
+	<title>Bug Tracker</title>
+	<script src="react.js"></script>
+	<script src="react-dom.js"></script>
+	<script src="browser.min.js"></script>
+	<script type="text/javascript">
+		/*Use Cases*/
+		/*
+		1. List the bugs
+		2. Add a new bug
+		3. Toggle the closed status of the bug
+		4. Remove closed bugs
+		5. Display stats (closed bugs / open bugs)
+		*/
+	</script>
+	<style type="text/css">
+	.statistics{
+		font-size: 18pt;
+	}
+	.closed{
+		color : red;
+		text-decoration: line-through;
+		font-style: italic;
+		font-weight: bold;
+	}
+	li{
+		cursor: pointer;
+	}
+	</style>
+
+	<script type="text/babel">
+		function BugStore(){
+			var bugs = [
+				{id : 1, name : 'Data validation failure', isClosed : false},
+				{id : 2, name : 'Server communication interupts', isClosed : true},
+				{id : 3, name : 'User actions not recognized', isClosed : false}
+			];
+			function addNew(newBug){
+				this.bugs.push(newBug);
+				if (this.onChange) this.onChange();
+			}
+			return{
+				bugs : bugs,
+				addNew : addNew,
+				onChange : null
+			}
+		}
+
+		var bugStore = new BugStore();
+		
+
+		var App = React.createClass({
+			render : function(){
+				return (<div>
+					<BugStats bugs = {this.props.store.bugs}/>
+					<BugList store = {this.props.store} dispatcher={this.props.dispatcher}/>
+				</div>);
+			}
+		});
+
+		var BugStats = React.createClass({
+			render : function(){
+				return (
+					<div className="statistics">
+						<span className="closed">2</span>
+						<span>/</span>
+						<span>{this.props.bugs.length}</span>
+					</div>
+				);
+			}
+		});
+
+		var BugList = React.createClass({
+			addBug : function(evt){
+				dispatcher.dispatch(createAddAction(this.refs.bugName.value));
+			},
+			render : function(){
+				console.log(this.props);
+					var bugs = this.props.store.bugs;
+					var list = bugs.map(function(bug){
+						if (bug.isClosed)
+							return <li key={bug.id} className="closed">{bug.name}</li>;
+						return <li key={bug.id}>{bug.name}</li>;
+					});
+					console.log(list);
+				return (
+					
+					<div className="list">
+						<label htmlFor="">Bug :</label>
+						<input type="text" ref="bugName"/>
+						<input type="button" value="Add New" onClick={this.addBug} />
+						<input type="button" value="Remove Closed" />
+						<ol>
+							{list}
+						</ol>
+					</div>
+				);
+			}
+		});
+
+		function createAddAction(bugName){
+			return {
+				type : 'ADD_NEW',
+				bugName : bugName
+			}
+		};
+
+		function Dispatcher(reducer, store){
+			this.dispatch = function(action){
+				reducer(action, store);
+			}
+		}
+
+		function bugsReducer(action, store){
+			if (action.type === 'ADD_NEW'){
+				var newBug = {
+					id : store.bugs.length + 1,
+					name :action.bugName,
+					isClosed : false
+				};
+				store.addNew(newBug);
+			}
+		}
+
+		function Provider(dispatcher, store){
+			this.render = function(){
+				ReactDOM.render(<App store={this.store} dispatcher={dispatcher}/>, document.getElementById("content"));
+			};
+			this.store = store;
+			this.store.onChange = function(){
+				this.render();
+			}.bind(this);
+		}
+		var store = new BugStore();
+		var dispatcher = new Dispatcher(bugsReducer, store);
+		var provider = new Provider(dispatcher, store);
+		provider.render();
+		
+	</script>
 </head>
 <body>
- 
- <script type="text/babel">
-	var AppHeading = React.createClass({
-		render : function(){
-			return (<h1>{this.props.title}</h1>)
-		}
-	});
-	
-	var AppMessage = React.createClass({
-		render : function(){
-			return (<h3>{this.props.message}</h3>)
-		}
-	});
-	
-	var Content = React.createClass({
-		render : function(){
-			return (<div>
-			<AppHeading title={this.props.input.title}></AppHeading>
-			<AppMessage message={this.props.input.message}></AppMessage>
-			</div>);
-		}
-	});
-	 var data = {
-		title : "Welcome to react",
-		message : "A Facinating way!"
-	 };
-	
-	ReactDOM.render(<Content input={data}/>, document.body);
- </script>
-<!-- ReactDOM.render(<Content title="Welcome to React" message="Hey You"/>, document.body); -->
+	<h1>Bug Tracker</h1>
+	<div id="content">
+		
+		
+	</div>
+	<script type="text/babel">
+		
+	</script>
 </body>
 </html>
